@@ -12,29 +12,11 @@
   <!-- laravel CRUD token -->
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <!-- Canonical SEO -->
-  <link rel="canonical" href="https://themeselection.com/item/sneat-bootstrap-laravel-admin-template/">
+  <link rel="canonical" href="https://mortuary.cloud">
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="assets/img/logo.png" />
 
-  
-      <!-- Google Tag Manager (Default ThemeSelection: GTM-5DDHKGP, PixInvent: GTM-5J3LMKC) -->
-  <script>
-    (function (w, d, s, l, i) {
-      w[l] = w[l] || [];
-      w[l].push({
-        'gtm.start': new Date().getTime(),
-        event: 'gtm.js'
-      });
-      var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s),
-        dl = l != 'dataLayer' ? '&l=' + l : '';
-      j.async = true;
-      j.src =
-        '../../../../www.googletagmanager.com/gtm5445.html?id=' + i + dl;
-      f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-5DDHKGP');
-  </script>
-  <!-- End Google Tag Manager -->
+
     
 
   <!-- Include Styles -->
@@ -197,7 +179,7 @@
           </div>
           <div class="mb-3">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="remember-me">
+              <input class="form-check-input" type="checkbox" id="remember-me" name="remember" >
               <label class="form-check-label" for="remember-me">
                 Remember Me
               </label>
