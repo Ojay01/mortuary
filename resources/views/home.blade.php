@@ -89,38 +89,106 @@
 <!-- Users List Table -->
 <div class="card">
   <div class="card-header">
-    <h5 class="card-title mb-0">Search Filter</h5>
+    <h5 class="card-title mb-0">Latest Corpse</h5>
   </div>
   <div class="card-datatable table-responsive">
-    <table class="datatables-users table border-top">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>User</th>
-                <th>Email</th>
-                <th>Verified</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>Emily Davis</td>
-                <td>emily.davis@example.com</td>
-                <td class="text-center dtr-hidden"><i class="bx fs-4 bx-shield-x text-danger"></i></td>
-                <td class="dtr-hidden">
-
+    <table class=" table border-top">
+    <thead>
+        <tr>
+            <th class="control sorting_disabled dtr-hidden" rowspan="1" colspan="1" style="width: 0px; display: none;" tabindex="0"></th>
+            <th>QR Code</th>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="odd">
+            <td class="control dtr-hidden" style="display: none;" tabindex="0"> </td>
+            <td><span>1</span></td>
+            <td class="sorting_1">
+                <div class="d-flex justify-content-start align-items-center user-name">
+                    <div class="avatar-wrapper">
+                        <div class="avatar avatar-sm me-3">
+                            <span class="avatar-initial rounded-circle bg-label-info">JD</span>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <a href="#" class="text-body text-truncate">
+                            <span class="fw-medium">Emily Davis</span>
+                        </a>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <span class="user-email">emily.davis@example.com</span>
+            </td>
+            <td class="text-center">
+                <i class="bx fs-4 bx-shield-x text-danger"></i>
+            </td>
+            <td>
                 <div class="d-inline-block text-nowrap">
-                <button class="btn btn-sm btn-icon edit-record" data-id="696" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser"><i class="bx bx-edit"></i></button>
-                <button class="btn btn-sm btn-icon delete-record" data-id="696"><i class="bx bx-trash"></i></button>
-                <button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="bx bx-dots-vertical-rounded"></i></button>
-                <div class="dropdown-menu dropdown-menu-end m-0" style=""><a href="#" class="dropdown-item">View</a><a href="javascript:;" class="dropdown-item">Suspend</a></div></div>
+                    <button class="btn btn-sm btn-icon edit-record" data-id="696" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser">
+                        <i class="bx bx-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-icon delete-record" data-id="696">
+                        <i class="bx bx-trash"></i>
+                    </button>
+                    <button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end m-0">
+                        <a href="#" class="dropdown-item">View</a>
+                        <a href="javascript:;" class="dropdown-item">Suspend</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr class="odd">
+            <td class="control dtr-hidden" style="display: none;" tabindex="0"> </td>
+            <td><span>1</span></td>
+            <td class="sorting_1">
+                <div class="d-flex justify-content-start align-items-center user-name">
+                    <div class="avatar-wrapper">
+                        <div class="avatar avatar-sm me-3">
+                            <span class="avatar-initial rounded-circle bg-label-info">JD</span>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <a href="#" class="text-body text-truncate">
+                            <span class="fw-medium">Emily Davis</span>
+                        </a>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <span class="user-email">emily.davis@example.com</span>
+            </td>
+            <td class="text-center">
+                <i class="bx fs-4 bx-shield-x text-danger"></i>
+            </td>
+            <td>
+                <div class="d-inline-block text-nowrap">
+                    <button class="btn btn-sm btn-icon edit-record" data-id="696" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddUser">
+                        <i class="bx bx-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-icon delete-record" data-id="696">
+                        <i class="bx bx-trash"></i>
+                    </button>
+                    <button class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end m-0">
+                        <a href="#" class="dropdown-item">View</a>
+                        <a href="javascript:;" class="dropdown-item">Suspend</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
 
-                </td>
-            </tr>
-            
-        </tbody>
-    </table>
 </div>
 
   <!-- Offcanvas to add new user -->
@@ -209,15 +277,7 @@
 
           <!-- Footer -->
                     <!-- Footer-->
-<footer class="content-footer footer bg-footer-theme">
-  <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-    <div class="mb-2 mb-md-0">
-      © <script>document.write(new Date().getFullYear())</script>
-      , made with ❤️ by <a href="https://ameneacademy.com/" target="_blank" class="footer-link fw-medium">Kelly Kingston</a>
-    </div>
-    
-  </div>
-</footer>
+@include('footer')
 <!--/ Footer-->
                     <!-- / Footer -->
           <div class="content-backdrop fade"></div>

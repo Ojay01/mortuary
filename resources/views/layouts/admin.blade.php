@@ -124,7 +124,7 @@
     
 
     <li class="menu-item ">
-      <a href="#" class="menu-link" >
+      <a href=" {{route('home')}} " class="menu-link" >
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div class="text-truncate">Dashboard</div>
                   <!--div class="badge bg-danger rounded-pill ms-auto">5</div-->
@@ -296,7 +296,7 @@
           </li>
    
     <li class="menu-item ">
-      <a href="#" class="menu-link" >
+      <a href=" {{route('profile')}} " class="menu-link" >
                 <i class="menu-icon tf-icons bx bx-check-shield"></i>
                 <div class="text-truncate">Profile</div>
               </a>
@@ -365,7 +365,7 @@
                   <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
                     <i class="bx bx-check-shield fs-4"></i>
                   </span>
-                  <a href="#" class="stretched-link">User Profile</a>
+                  <a href=" {{route('profile')}} " class="stretched-link">User Profile</a>
                   <small class="text-muted mb-0">Profile Settings</small>
                 </div>
               </div>
@@ -374,7 +374,7 @@
                   <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
                     <i class="bx bx-pie-chart-alt-2 fs-4"></i>
                   </span>
-                  <a href="#" class="stretched-link">Dashboard</a>
+                  <a href=" {{route('home')}} " class="stretched-link">Dashboard</a>
                   <small class="text-muted mb-0">My Dashboard</small>
                 </div>
                 <div class="dropdown-shortcuts-item col">
@@ -631,7 +631,7 @@
               <div class="dropdown-divider"></div>
             </li>
             <li>
-              <a class="dropdown-item" href="#">
+              <a class="dropdown-item" href=" {{route('profile')}} ">
                 <i class="bx bx-user me-2"></i>
                 <span class="align-middle">My Profile</span>
               </a>
@@ -673,7 +673,47 @@
             <!-- END: Navbar-->
 
         @yield('content')
-
+        @if ($errors->any())
+        <div class="bs-toast toast toast-ex animate__animated my-2 fade bg-danger animate__tada show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+  <div class="toast-header">
+    <i class='bx bx-bell me-2'></i>
+    <div class="me-auto fw-medium">Oooops!</div>
+    <small>Now</small>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body">
+    @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+  </div>
+</div>
+@endif
+         @if(session('error'))
+        <div class="bs-toast toast toast-ex animate__animated my-2 fade bg-danger animate__tada show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+  <div class="toast-header">
+    <i class='bx bx-bell me-2'></i>
+    <div class="me-auto fw-medium">Now</div>
+    <small>Now</small>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body">
+                {{ session('error') }}
+  </div>
+</div>
+@endif
+         @if(session('success'))
+        <div class="bs-toast toast toast-ex animate__animated my-2 fade bg-success animate__tada show" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="2000">
+  <div class="toast-header">
+    <i class='bx bx-bell me-2'></i>
+    <div class="me-auto fw-medium">Bravoo!!!</div>
+    <small>Now</small>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body">
+                {{ session('success') }}
+  </div>
+</div>
+@endif
 
 </div>
       <!-- / Layout page -->
@@ -723,6 +763,9 @@
 <script src="js/laravel-user-management.js"></script>
 <!-- END: Page JS-->
 <script src="assets/js/dashboards-analytics.js"></script>
+
+<script src="assets/js/pages-account-settings-account.js"></script>
+
 </body>
 
 </html>
