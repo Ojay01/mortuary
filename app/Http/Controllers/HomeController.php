@@ -9,7 +9,8 @@ use App\Models\UserSession;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
-
+use App\Models\User;
+use App\Models\Freezer;
 
 class HomeController extends Controller
 {
@@ -30,8 +31,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $staff = User::where('role', 'staff')->count(); 
+        return view('home', compact('staff')); 
     }
+
 
     public function profile(Request $request)
     {
@@ -43,6 +46,17 @@ class HomeController extends Controller
    public function accountSetting()
     {
         return view('profile.settings');
+    }
+
+   public function freezer()
+    {
+        $freezer = Freezer::all(); 
+        return view('storage.freezer', compact('freezer'));
+    }
+
+   public function embalm()
+    {
+        return view('storage.embalm');
     }
 
     public function update(Request $request)
@@ -105,5 +119,23 @@ class HomeController extends Controller
         } else {
             return redirect()->back()->withErrors(['current_password' => 'The current password is incorrect.']);
         }
+    }
+
+    public function store(Request $request)
+    {
+        // Validate the request data
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+        ]);
+
+        // Create a new Freezer instance and save it to the database
+        Freezer::create([
+            'name' => $request->input('name'),
+            'location' => $request->input('location'),
+        ]);
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Freezer added successfully!');
     }
 }

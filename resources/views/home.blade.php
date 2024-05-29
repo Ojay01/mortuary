@@ -16,7 +16,7 @@
           <div class="content-left">
             <span>Staffs</span>
             <div class="d-flex align-items-end mt-2">
-              <h3 class="mb-0 me-2">7</h3>
+              <h3 class="mb-0 me-2"> {{$staff}} </h3>
               <small class="text-success">(100%)</small>
             </div>
             <small>Total Staffs</small>
@@ -33,12 +33,12 @@
       <div class="card-body">
         <div class="d-flex align-items-start justify-content-between">
           <div class="content-left">
-            <span>Verified Users</span>
+            <span>Enrol Corpses</span>
             <div class="d-flex align-items-end mt-2">
               <h3 class="mb-0 me-2">0</h3>
               <small class="text-success">(+95%)</small>
             </div>
-            <small>Recent analytics </small>
+            <small>Total Corpses </small>
           </div>
           <span class="badge bg-label-success rounded p-2">
             <i class="bx bx-user-check bx-sm"></i>
@@ -52,12 +52,12 @@
       <div class="card-body">
         <div class="d-flex align-items-start justify-content-between">
           <div class="content-left">
-            <span>Duplicate Users</span>
+            <span>Pending Payments</span>
             <div class="d-flex align-items-end mt-2">
               <h3 class="mb-0 me-2">0</h3>
               <small class="text-success">(0%)</small>
             </div>
-            <small>Recent analytics</small>
+            <small>No of Due corpse awaiting Payments</small>
           </div>
           <span class="badge bg-label-danger rounded p-2">
             <i class="bx bx-group bx-sm"></i>
@@ -71,12 +71,12 @@
       <div class="card-body">
         <div class="d-flex align-items-start justify-content-between">
           <div class="content-left">
-            <span>Verification Pending</span>
+            <span>Autopsy Corpses</span>
             <div class="d-flex align-items-end mt-2">
               <h3 class="mb-0 me-2">7</h3>
               <small class="text-danger">(+6%)</small>
             </div>
-            <small>Recent analytics</small>
+            <small>Currently in autopsy</small>
           </div>
           <span class="badge bg-label-warning rounded p-2">
             <i class="bx bx-user-voice bx-sm"></i>
@@ -85,6 +85,67 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-xl-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-start justify-content-between">
+          <div class="content-left">
+            <span>Total Revenue</span>
+            <div class="d-flex align-items-end mt-2">
+              <h3 class="mb-0 me-2"> 100,000,000 &#8355; </h3>
+              <small class="text-success">(100%)</small>
+            </div>
+            <small>Total Income made</small>
+          </div>
+          <span class="badge bg-label-success rounded p-2">
+            <i class="bx bx-wallet bx-sm"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-start justify-content-between">
+          <div class="content-left">
+            <span>Total Owning</span>
+            <div class="d-flex align-items-end mt-2">
+              <h3 class="mb-0 me-2">1,000,000 &#8355;</h3>
+              <small class="text-success">(+95%)</small>
+            </div>
+            <small>Awaiting Payments </small>
+          </div>
+          <span class="badge bg-label-warning rounded p-2">
+            <i class="bx bx-loader bx-spin bx-sm"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-start justify-content-between">
+          <div class="content-left">
+            <span>Missing Corpses</span>
+            <div class="d-flex align-items-end mt-2">
+              <h3 class="mb-0 me-2">0</h3>
+              <small class="text-success">(0%)</small>
+            </div>
+            <small>Total Missing Corpses</small>
+          </div>
+          <span class="badge bg-label-danger rounded p-2">
+            <i class="bx bx-error bx-flashing bx-sm"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 <!-- Users List Table -->
 <div class="card">

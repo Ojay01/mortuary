@@ -54,7 +54,7 @@
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="phoneNumber">Phone Number</label>
                                     <div class="input-group input-group-merge">
-                                        <span class="input-group-text">CMR (+1237)</span>
+                                        <span class="input-group-text">CMR (+237)</span>
                                         <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" value="{{ old('phoneNumber', $user->phoneNumber) }}" placeholder="673909858" />
                                     </div>
                                     @error('phoneNumber')
@@ -107,6 +107,8 @@
                 </div>
             </div>
         </div>
+@include('footer')
+
     </div>
 </div>
 @endsection

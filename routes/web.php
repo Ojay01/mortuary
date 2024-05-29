@@ -14,3 +14,6 @@ Route::get('/profile-setting', [HomeController::class, 'profile'])->name('profil
 Route::get('/profile-account-setting', [HomeController::class, 'accountSetting'])->name('accountSetting');
 Route::post('/update/password', [HomeController::class, 'updatePassword'])->name('update.password');
 Route::post('/profile/update', [HomeController::class, 'update'])->name('profile.update');
+Route::get('/storage/freezers', [HomeController::class, 'freezer'])->name('freezer');
+Route::get('/storage/embalments', [HomeController::class, 'embalm'])->name('embalm');
+Route::post('/freezer/store', [HomeController::class, 'store'])->name('freezer.store');

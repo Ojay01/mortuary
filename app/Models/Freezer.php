@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Freezer extends Model
 {
     use HasFactory;
+
+     protected $fillable = [
+        'location',
+        'name',
+        'status',
+    ];
 }
