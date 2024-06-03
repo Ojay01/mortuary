@@ -15,6 +15,7 @@ class Corpse extends Model
         'relative_number',
         'identified',
         'qr_code',
+        'country',
         'brought_by_id',
         'removal_date',
         'status',

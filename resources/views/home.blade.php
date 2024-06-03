@@ -1,6 +1,8 @@
 @extends('layouts.admin')
 @section('title', 'Dashboard')
 @section('content')
+<script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+
 <!-- Content wrapper -->
       <div class="content-wrapper">
 
@@ -147,6 +149,8 @@
   </div>
 
 </div>
+{{$qrcode}}
+
 <!-- Users List Table -->
 <div class="card">
   <div class="card-header">

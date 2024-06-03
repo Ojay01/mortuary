@@ -47,8 +47,17 @@
 <link rel="stylesheet" href="/assets/vendor/libs/%40form-validation/umd/styles/index.min.css" />
 <link rel="stylesheet" href="/assets/vendor/libs/animate-css/animate.css" />
 <link rel="stylesheet" href="/assets/vendor/libs/sweetalert2/sweetalert2.css" />
-
+<link rel="stylesheet" href="/assets/vendor/libs/bootstrap-select/bootstrap-select.css" />
  <link rel="stylesheet" href="/assets/vendor/css/pages/page-account-settings.css" />
+<!-- Vendor Styles -->
+<link rel="stylesheet" href="/assets/vendor/libs/flatpickr/flatpickr.css" />
+<link rel="stylesheet" href="/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.css" />
+<link rel="stylesheet" href="/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css" />
+<link rel="stylesheet" href="/assets/vendor/libs/jquery-timepicker/jquery-timepicker.css" />
+<link rel="stylesheet" href="/assets/vendor/libs/pickr/pickr-themes.css" />
+ <!-- Vendor Styles -->
+<link rel="stylesheet" href="/assets/vendor/libs/bs-stepper/bs-stepper.css" />
+
 <!-- Page Styles -->
 
   <!-- Include Scripts for customizer, helper, analytics, config -->
@@ -62,6 +71,8 @@
 
   <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
   <script src="/assets/js/config.js"></script>
+
+
 
   <script>
     window.templateCustomizer = new TemplateCustomizer({
@@ -123,16 +134,13 @@
   <ul class="menu-inner py-1">
     
 
-    <li class="menu-item ">
+    <li class="menu-item {{ request()->routeIs('home') ? 'active' : '' }}">
       <a href=" {{route('home')}} " class="menu-link" >
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div class="text-truncate">Dashboard</div>
                   <!--div class="badge bg-danger rounded-pill ms-auto">5</div-->
               </a>
     </li>
-            
-    
-    
     <li class="menu-item ">
       <a href="javascript:void(0);" class="menu-link" >
                 <i class="menu-icon tf-icons bx bx-layout"></i>
@@ -140,36 +148,46 @@
               </a>
           </li>
 
-    <li class="menu-item ">
+    <li class="menu-item {{ request()->routeIs(['add_corpse', 'generateqrcode', 'allCorpse', 'availableCorpse', 'removedCorpse', 'missingCorpse', 'autopsyCorpse']) ? 'active open' : '' }}">
       <a href="javascript:void(0);" class="menu-link menu-toggle" >
                 <i class="menu-icon tf-icons bx bx-store"></i>
                 <div class="text-truncate">Corpse </div>
               </a>
             <ul class="menu-sub">
-      <li class="menu-item ">
-        <a href="#" class="menu-link" >
+      <li class="menu-item {{ request()->routeIs('generateqrcode') ? 'active' : '' }}">
+        <a href="{{route('generateqrcode')}}" class="menu-link" >
                     <div>Generate QR Code</div>
         </a>
               </li>
-      <li class="menu-item ">
-        <a href="#" class="menu-link"  >
+      <li class="menu-item {{ request()->routeIs('add_corpse') ? 'active' : '' }}">
+        <a href=" {{route('add_corpse')}} " class="menu-link"  >
                     <div>Enrol Corpse</div>
         </a>  
               </li>
-      <li class="menu-item ">
-        <a href="#" class="menu-link" >
+      <li class="menu-item {{ request()->routeIs('allCorpse') ? 'active' : '' }}">
+        <a href=" {{route('allCorpse')}} " class="menu-link" >
                     <div>All Corpse</div>
         </a>  
               </li>
 
-      <li class="menu-item ">
-        <a href="#" class="menu-link" >
+      <li class="menu-item {{ request()->routeIs('availableCorpse') ? 'active' : '' }}">
+        <a href="{{route('availableCorpse')}}" class="menu-link" >
                     <div>Present Corpses </div>
         </a>
               </li>
-      <li class="menu-item ">
-        <a href="#" class="menu-link" >
+      <li class="menu-item {{ request()->routeIs('removedCorpse') ? 'active' : '' }}">
+        <a href="{{route('removedCorpse')}}" class="menu-link" >
                     <div>Removed Corpses</div>
+        </a>
+        </li>
+      <li class="menu-item {{ request()->routeIs('missingCorpse') ? 'active' : '' }}">
+        <a href="{{route('missingCorpse')}}" class="menu-link" >
+                    <div>Missing Corpses</div>
+        </a>
+        </li>
+      <li class="menu-item {{ request()->routeIs('autopsyCorpse') ? 'active' : '' }}">
+        <a href="{{route('autopsyCorpse')}}" class="menu-link" >
+                    <div>Autopsy Corpses</div>
         </a>
         </li>
       </ul>
@@ -179,74 +197,42 @@
       <a href="javascript:void(0);" class="menu-link menu-toggle" >
                 <i class="menu-icon tf-icons bx bx-user"></i>
                 <div class="text-truncate">Staff</div>
-              </a>
-
-      
-            <ul class="menu-sub">
-      
-    
-    
+              </a>      
+            <ul class="menu-sub">   
       <li class="menu-item ">
         <a href="#" class="menu-link" >
                     <div>All Staff</div>
-        </a>
-
-        
+        </a>       
               </li>
       <li class="menu-item ">
         <a href="#" class="menu-link" >
                     <div>Add Staff</div>
         </a>
-
-        
-             
-    
-    
-    
       <li class="menu-item ">
         <a href="javascript:void(0)" class="menu-link menu-toggle" >
                     <div>View</div>
-        </a>
-
-        
-                  <ul class="menu-sub">
-      
-    
-    
+        </a>       
+                  <ul class="menu-sub">  
       <li class="menu-item ">
         <a href="../app/user/view/account.html" class="menu-link" >
                     <div>Account</div>
-        </a>
-
-        
-              </li>
-    
-    
-    
+        </a>      
+              </li>  
       <li class="menu-item ">
         <a href="../app/user/view/security.html" class="menu-link" >
                     <div>Security</div>
         </a>
-
-        
               </li>
-  
       <li class="menu-item ">
         <a href="../app/user/view/billing.html" class="menu-link" >
                     <div>Billing &amp; Plans</div>
         </a>
-
-        
               </li>
-   
       <li class="menu-item ">
         <a href="../app/user/view/notifications.html" class="menu-link" >
                     <div>Notifications</div>
         </a>
-
-        
               </li>
-    
       <li class="menu-item ">
         <a href="../app/user/view/connections.html" class="menu-link" >
                     <div>Connections</div>
@@ -275,10 +261,7 @@
             </a>
         </li>
     </ul>
-</li>
-
-  
-        
+</li>        
     <li class="menu-item ">
       <a href="#" class="menu-link" >
                 <i class="menu-icon tf-icons bx bx-detail"></i>
@@ -286,7 +269,7 @@
               </a>
           </li>
    
-    <li class="menu-item ">
+    <li class="menu-item {{ request()->routeIs(['profile', 'accountSetting']) ? 'active' : '' }}">
       <a href=" {{route('profile')}} " class="menu-link" >
                 <i class="menu-icon tf-icons bx bx-check-shield"></i>
                 <div class="text-truncate">Profile</div>
@@ -294,15 +277,13 @@
 
           </li>
 
-    <li class="menu-item ">
-      <a href="#" class="menu-link" >
+    <li class="menu-item {{ request()->routeIs('settings') ? 'active' : '' }}">
+      <a href=" {{route('settings')}}" class="menu-link " >
                 <i class="menu-icon bx bx-cog fs-4"></i>
                 <div class="text-truncate">Settings</div>
               </a>
 
-      
           </li>
-
           </ul>
 
 </aside>
@@ -720,7 +701,7 @@
 
   
   <div class="buy-now">
-    <a href="/" target="_blank" class="btn btn-info btn-buy-now">Enrol Corpse</a>
+    <a href="{{route('add_corpse')}}" class="btn btn-info btn-buy-now">Enrol Corpse</a>
   </div>
   
 
@@ -758,6 +739,16 @@
 <script src="/assets/js/pages-account-settings-account.js"></script>
 <script src="/assets/js/pages-account-settings-security.js"></script>
 <script src="/assets/js/modal-enable-otp.js"></script>
+<script src="/assets/vendor/libs/bs-stepper/bs-stepper.js"></script>
+<script src="/assets/js/form-wizard-numbered.js"></script>
+<script src="/assets/js/form-wizard-validation.js"></script>
+<script src="/assets/vendor/libs/bootstrap-select/bootstrap-select.js"></script>
+<script src="/assets/js/forms-pickers.js"></script>
+<script src="/assets/vendor/libs/flatpickr/flatpickr.js"></script>
+<script src="/assets/vendor/libs/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+<script src="/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js"></script>
+<script src="/assets/vendor/libs/jquery-timepicker/jquery-timepicker.js"></script>
+<script src="/assets/vendor/libs/pickr/pickr.js"></script>
 </body>
 
 </html>
