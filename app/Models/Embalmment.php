@@ -15,4 +15,10 @@ class Embalmment extends Model
         'status',
         'capacity',
     ];
+
+    public function corpses()
+    {
+        return $this->hasMany(Corpse::class, 'embalment_id');
+    }
+
 }

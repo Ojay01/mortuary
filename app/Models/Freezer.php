@@ -14,4 +14,9 @@ class Freezer extends Model
         'name',
         'status',
     ];
+
+    public function corpses()
+    {
+        return $this->hasMany(Corpse::class, 'freezer_id');
+    }
 }

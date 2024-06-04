@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class BroughtInBy extends Model
 {
     use HasFactory;
+     protected $fillable = [
+        'relationship',
+        'name',
+        'from',
+    ];
 }

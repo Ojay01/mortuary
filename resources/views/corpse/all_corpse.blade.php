@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class="d-flex flex-column">
-            <a href="#" class="text-body text-truncate">
+            <a href="{{ route('corpseProfile', $corspse->qr_code) }}" class="text-body text-truncate">
                 <span class="fw-medium">{{ $corspse->name }}</span>
             </a>
             <span class="fw-medium text-muted">{{ $corspse->qr_code }}</span>
@@ -48,9 +48,17 @@
 
         </div>
     </td>
-    <td>
-        <span class="user-email">{{$corspse->location}}</span>
-    </td>
+     <td>
+                        <span class="user-email">
+                            @if($corspse->freezer_id)
+                                {{ $corspse->freezer->name }}
+                            @elseif($corspse->embalment_id)
+                                {{ $corspse->embalmment->name }}
+                            @else
+                                N/A
+                            @endif
+                        </span>
+                    </td>
     <td>
         <span class="user-email">{{$corspse->relative_number}}</span>
     </td>
@@ -96,7 +104,17 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="add-user-email{{$corspse->id}}">Location</label>
-                <input type="text" id="add-user-email{{$corspse->id}}" class="form-control" value="{{$corspse->location}}" placeholder="corspse room1" aria-label="corspse room1" name="location" required />
+               @php
+    $storageName = 'N/A';
+    if ($corspse->freezer_id) {
+        $storageName = $corspse->freezer->name;
+    } elseif ($corspse->embalment_id) {
+        $storageName = $corspse->embalmment->name;
+    }
+@endphp
+
+<input type="text" id="add-user-email{{ $corspse->id }}" class="form-control" value="{{ $storageName }}" placeholder="corpse room1" aria-label="corpse room1" name="location" required />
+
                 <div class="mb-3">
         <label class="form-label" for="capacity">Contact</label>
         <input type="relative_number" id="capacity" class="form-control" placeholder="Relative phone number" value="{{$corspse->relative_number}}" aria-label="12" name="relative_number" required />

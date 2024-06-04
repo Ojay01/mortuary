@@ -31,3 +31,5 @@ Route::put('/freezers/{id}', [HomeController::class, 'updatefreezer'])->name('fr
 Route::put('/embalments/{id}', [HomeController::class, 'updateembalments'])->name('embalment.update');
 Route::post('/settings/save', [HomeController::class, 'savesetting'])->name('settings.save');
 Route::post('/qr/code', [HomeController::class, 'qrCode'])->name('qr.code');
+Route::get('/corpse/{qr_code}/profile', [HomeController::class, 'corpseProfile'])->name('corpseProfile');
+Route::put('/corpse/{qr_code}/update', [HomeController::class, 'updateCorpse'])->name('corpse.update');

@@ -58,6 +58,7 @@
  <!-- Vendor Styles -->
 <link rel="stylesheet" href="/assets/vendor/libs/bs-stepper/bs-stepper.css" />
 
+<link rel="stylesheet" href="/assets/vendor/css/pages/page-profile.css" />
 <!-- Page Styles -->
 
   <!-- Include Scripts for customizer, helper, analytics, config -->
@@ -353,7 +354,7 @@
                   <span class="dropdown-shortcuts-icon bg-label-secondary rounded-circle mb-2">
                     <i class="bx bx-cog fs-4"></i>
                   </span>
-                  <a href="#" class="stretched-link">Setting</a>
+                  <a href=" {{route('settings')}} " class="stretched-link">Setting</a>
                   <small class="text-muted mb-0">Site Settings</small>
                 </div>
               </div>
@@ -609,7 +610,7 @@
               </a>
             </li>
                         <li>
-              <a class="dropdown-item" href="#">
+              <a class="dropdown-item" href=" {{route('settings')}} ">
                 <span class="d-flex align-items-center align-middle">
                   <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
                   <span class="flex-grow-1 align-middle">Billing</span>
@@ -749,6 +750,8 @@
 <script src="/assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js"></script>
 <script src="/assets/vendor/libs/jquery-timepicker/jquery-timepicker.js"></script>
 <script src="/assets/vendor/libs/pickr/pickr.js"></script>
+<script src="/assets/js/app-user-view-account.js"></script>
+
 </body>
 
 </html>

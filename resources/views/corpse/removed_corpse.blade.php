@@ -40,7 +40,7 @@
                 </div>
             </div>
             <div class="d-flex flex-column">
-            <a href="#" class="text-body text-truncate">
+            <a href="{{ route('corpseProfile', $corpse->qr_code) }}" class="text-body text-truncate">
                 <span class="fw-medium">{{ $corpse->name }}</span>
             </a>
             <span class="fw-medium text-muted">{{ $corpse->qr_code }}</span>

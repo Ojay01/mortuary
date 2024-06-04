@@ -17,7 +17,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\Corpse;
 use App\Models\BroughtInBy;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -75,8 +75,31 @@ class HomeController extends Controller
 
    public function add_corpse()
     {
-        $freezers = Freezer::all();
-        $embalments = Embalmment::all();
+        // Get freezers that are not associated with any corpse or associated with a removed corpse
+        $freezers = Freezer::where('status', '!=', 'maintenance')
+            ->where(function($query) {
+                $query->whereDoesntHave('corpses')
+                      ->orWhereHas('corpses', function ($query) {
+                          $query->where('status', 'Removed');
+                      });
+            })
+            ->get();
+
+        // Get embalments that are not associated with any corpse or associated with a removed corpse
+       $embalments = Embalmment::where('status', '!=', 'maintenance')
+            ->where(function($query) {
+                $query->whereDoesntHave('corpses', function ($query) {
+                    $query->where('status', '!=', 'Removed');
+                })
+                ->orWhereHas('corpses', function ($query) {
+                    $query->select(DB::raw('count(*)'))
+                          ->where('status', '!=', 'Removed')
+                          ->groupBy('embalment_id')
+                          ->havingRaw('count(*) < embalmments.capacity');
+                });
+            })
+            ->get();
+
         return view('corpse.add', compact('freezers', 'embalments'));
     }
 
@@ -87,20 +110,21 @@ class HomeController extends Controller
     }
 
    public function allCorpse()
-    {
-        $allCorpse = Corpse::all(); 
-        return view('corpse.all_corpse', compact('allCorpse'));
-    }
+{
+    $allCorpse = Corpse::with(['embalmment', 'freezer'])->get(); 
+    return view('corpse.all_corpse', compact('allCorpse'));
+}
+
 
    public function availableCorpse()
     {
-        $availableCorpse = Corpse::where('status', 'available')->get();
+        $availableCorpse = Corpse::where('status', 'available')->with(['freezer', 'embalmment'])->get();
         return view('corpse.present_corpse', compact('availableCorpse'));
     }
 
    public function missingCorpse()
     {
-        $missingCorpse = Corpse::where('status', 'missing')->get();
+        $missingCorpse = Corpse::where('status', 'missing')->with(['freezer', 'embalmment'])->get();
         return view('corpse.missing_corpse', compact('missingCorpse'));
     }
 
@@ -114,7 +138,7 @@ class HomeController extends Controller
 
    public function autopsyCorpse()
     {
-        $autopsyCorpse =Corpse::where('status', 'autopsy')->get();
+        $autopsyCorpse =Corpse::where('status', 'autopsy')->with(['freezer', 'embalmment'])->get();
         return view('corpse.autopsy', compact('autopsyCorpse'));
     }
 
@@ -253,62 +277,105 @@ class HomeController extends Controller
     $embalm = Embalmment::findOrFail($id);
     $embalm->name = $request->input('name');
     $embalm->location = $request->input('location');
+
+ $corpseCount = Corpse::where('embalment_id', $id)
+                             ->where('status', 'available')
+                             ->count();
+    // Check if capacity is being decreased
+    if ($request->input('capacity') < $embalm->capacity) {
+        // Check if the number of associated corpses exceeds the new capacity
+       
+        if ($corpseCount > $request->input('capacity')) {
+            return redirect()->back()->with('error', 'Cannot decrease capacity. Number of associated corpses exceeds the new capacity.');
+        }
+    }
+
+    // Update status to "in-use" if capacity is equal to the count of available corpses
+    if ($request->input('capacity') == $corpseCount) {
+        $embalm->status = 'in-use';
+    } else {
+        $embalm->status = $request->input('status');
+    }
+
     $embalm->capacity = $request->input('capacity');
-    $embalm->status = $request->input('status');
     $embalm->save();
 
     return redirect()->back()->with('success', 'Embalmment updated successfully.');
 }
 
+
     public function addCorpse(Request $request)
-    {
-        // Validate the incoming request data
-        $request->validate([
-            'corpse_name' => 'required|string|max:255',
-            'cause_of_death' => 'required|string|max:255',
-            'relative_number' => 'required|string|max:255',
-            'country' => 'required|string|max:255',
-            'identified' => 'required|boolean',
-            'removal_date' => 'required|date',
-            'embalment_id' => 'nullable|integer|exists:embalmments,id',
-            'freezer_id' => 'nullable|integer|exists:freezers,id',
-            'brought_in_by_name' => 'required|string|max:255',
-            'brought_in_by_relationship' => 'required|string|max:255',
-            'brought_in_by_from' => 'required|string|max:255',
-        ]);
+{
+    // Validate the incoming request data
+    $request->validate([
+        'corpse_name' => 'required|string|max:255',
+        'cause_of_death' => 'required|string|max:255',
+        'relative_number' => 'required|string|max:255',
+        'country' => 'required|string|max:255',
+        'identified' => 'required|boolean',
+        'removal_date' => 'required|date',
+        'embalment_id' => 'nullable|integer|exists:embalmments,id',
+        'freezer_id' => 'nullable|integer|exists:freezers,id',
+        'brought_in_by_name' => 'required|string|max:255',
+        'brought_in_by_relationship' => 'required|string|max:255',
+        'brought_in_by_from' => 'required|string|max:255',
+    ]);
 
-        try {
-            // Create the brought_in_by record
-            $broughtInBy = new BroughtInBy();
-            $broughtInBy->name = $request->input('brought_in_by_name');
-            $broughtInBy->relationship = $request->input('brought_in_by_relationship');
-            $broughtInBy->from = $request->input('brought_in_by_from');
-            $broughtInBy->save();
+    try {
+        // Create the brought_in_by record
+        $broughtInBy = new BroughtInBy();
+        $broughtInBy->name = $request->input('brought_in_by_name');
+        $broughtInBy->relationship = $request->input('brought_in_by_relationship');
+        $broughtInBy->from = $request->input('brought_in_by_from');
+        $broughtInBy->save();
 
-            // Generate a unique QR code
-            $qrCode = $this->generateUniqueQrCode();
+        // Generate a unique QR code
+        $qrCode = $this->generateUniqueQrCode();
 
-            // Create the corpse record
-            $corpse = new Corpse();
-            $corpse->name = $request->input('corpse_name');
-            $corpse->brought_by_id = $broughtInBy->id;
-            $corpse->cause_of_death = $request->input('cause_of_death');
-            $corpse->relative_number = $request->input('relative_number');
-            $corpse->country = $request->input('country');
-            $corpse->identified = $request->input('identified');
-            $corpse->qr_code = $qrCode;
-            $corpse->removal_date = $request->input('removal_date');
-            $corpse->embalment_id = $request->input('embalment_id');
-            $corpse->freezer_id = $request->input('freezer_id');
-            $corpse->save();
+        // Create the corpse record
+        $corpse = new Corpse();
+        $corpse->name = $request->input('corpse_name');
+        $corpse->brought_by_id = $broughtInBy->id;
+        $corpse->cause_of_death = $request->input('cause_of_death');
+        $corpse->relative_number = $request->input('relative_number');
+        $corpse->country = $request->input('country');
+        $corpse->identified = $request->input('identified');
+        $corpse->qr_code = $qrCode;
+        $corpse->removal_date = $request->input('removal_date');
+        $corpse->embalment_id = $request->input('embalment_id');
+        $corpse->freezer_id = $request->input('freezer_id');
+        $corpse->save();
 
-            // Return a successful response
-            return redirect()->back()->with('success', 'Corpse Enrolled successfully.');
-        } catch (\Exception $e) {
-            // Return an error response
-            return response()->json(['message' => 'Failed to create records.', 'error' => $e->getMessage()], 500);
+        // Update Freezer status if freezer_id is provided
+        if ($request->filled('freezer_id')) {
+            $freezer = Freezer::find($request->input('freezer_id'));
+            if ($freezer) {
+                $freezer->status = 'inactive';
+                $freezer->save();
+            }
         }
+
+        // Update Embalment status if embalment_id is provided
+        if ($request->filled('embalment_id')) {
+            $embalment = Embalmment::find($request->input('embalment_id'));
+            if ($embalment) {
+                // Check the number of corpses in the embalment
+                $corpseCount = $embalment->corpses()->where('status', '!=', 'Removed')->count();
+                if ($corpseCount >= $embalment->capacity) {
+                    $embalment->status = 'in-use';
+                    $embalment->save();
+                }
+            }
+        }
+
+        // Return a successful response
+        return redirect()->back()->with('success', 'Corpse Enrolled successfully.');
+    } catch (\Exception $e) {
+        // Return an error response
+        return response()->json(['message' => 'Failed to create records.', 'error' => $e->getMessage()], 500);
     }
+}
+
 
     /**
      * Generate a unique 8-character QR code.
@@ -369,7 +436,148 @@ class HomeController extends Controller
             ]);
         }
 
-        return redirect()->back()->withErrors(['corpse' => 'Invalid corpse selected.']);
+        return redirect()->back()->with('error', 'Invalid corpse selected.');
     }
+
+       public function corpseProfile($qr_code)
+    {
+        // Retrieve the corpse by qr_code
+        $corpse = Corpse::where('qr_code', $qr_code)->with('broughtBy')->first();
+        
+        if (!$corpse) {
+            return redirect()->back()->with('error', 'No corpse found with this QR code.');
+        }
+
+        // Check if the QR code image exists
+        $qrCodePath = 'qrcodes/' . $corpse->qr_code . '.png';
+        if (!file_exists($qrCodePath)) {
+            $qrCodePath = null; // Set to null if QR code image does not exist
+        }
+
+        // Retrieve the brought_by details
+        $broughtBy = $corpse->broughtBy;
+
+        // Determine storage type
+        $storageType = null;
+        if ($corpse->freezer_id) {
+            $storageType = 'Freezer';
+        } elseif ($corpse->embalment_id) {
+            $storageType = 'Embalment';
+        }
+
+        // Get available freezers and embalments (assuming you have these variables)
+        $freezers = Freezer::where(function($query) use ($corpse) {
+                            $query->where('status', 'active')
+                                  ->orWhere('id', $corpse->freezer_id);
+                        })
+                        ->get();
+        $embalments = Embalmment::where(function($query) use ($corpse) {
+                            $query->where('status', 'available')
+                                  ->orWhere('id', $corpse->embalment_id);
+                        })
+                        ->get();
+
+        // Return a view with the corpse details, brought_by details, QR code image path, and storage type
+        return view('profile.corpse', compact('corpse', 'broughtBy', 'qrCodePath', 'storageType', 'freezers', 'embalments'));
+    }
+
+
+   public function updateCorpse(Request $request, $qr_code)
+{
+    // Retrieve the corpse by qr_code
+    $corpse = Corpse::where('qr_code', $qr_code)->first();
+    
+    if (!$corpse) {
+        return redirect()->back()->with('error', 'No corpse found with this QR code.');
+    }
+
+    // Validate the incoming request data
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'country' => 'required|string|max:255',
+        'status' => 'required|string|in:available,autopsy,removed,missing',
+        'bill' => 'required|numeric',
+        'identified' => 'required|boolean',
+        'paid' => 'required|boolean',
+        'removal_date' => 'nullable|date',
+        'cause_of_death' => 'nullable|string|max:255',
+        'storage_type' => 'required|string|in:Freezer,Embalment',
+        'freezer_id' => 'nullable|integer|exists:freezers,id',
+        'embalment_id' => 'nullable|integer|exists:embalmments,id',
+        'brought_by_name' => 'required|string|max:255',
+        'from' => 'required|string|max:255',
+        'relationship' => 'required|string|max:255',
+        'relative_number' => 'required|string|max:15',
+    ]);
+
+    // Start a transaction
+    DB::beginTransaction();
+
+    try {
+        // Update corpse details
+        $corpse->update([
+            'name' => $request->input('name'),
+            'country' => $request->input('country'),
+            'status' => $request->input('status'),
+            'bill' => $request->input('bill'),
+            'identified' => $request->input('identified'),
+            'paid' => $request->input('paid'),
+            'removal_date' => $request->input('removal_date'),
+            'cause_of_death' => $request->input('cause_of_death'),
+            'relative_number' => $request->input('relative_number'),
+        ]);
+
+        // Update BoughtInBy details
+        $broughtBy = BroughtInBy::where('id', $corpse->brought_by_id)->first();
+        if ($broughtBy) {
+            $broughtBy->update([
+                'name' => $request->input('brought_by_name'),
+                'from' => $request->input('from'),
+                'relationship' => $request->input('relationship'),
+            ]);
+        }
+
+        // Update storage details
+        $storageType = $request->input('storage_type');
+        $freezerId = $request->input('freezer_id');
+        $embalmentId = $request->input('embalment_id');
+
+        if ($storageType === 'Freezer') {
+            // Update Freezer table
+            if ($corpse->freezer_id) {
+                Freezer::where('id', $corpse->freezer_id)->update(['status' => 'active']);
+            }
+            $corpse->freezer_id = $freezerId;
+            $corpse->embalment_id = null;
+            Freezer::where('id', $freezerId)->update(['status' => 'inactive']);
+        } elseif ($storageType === 'Embalment') {
+            // Update Embalmment table
+            if ($corpse->embalment_id) {
+                Embalmment::where('id', $corpse->embalment_id)->update(['status' => 'available']);
+            }
+            $corpse->embalment_id = $embalmentId;
+            $corpse->freezer_id = null;
+            Embalmment::where('id', $embalmentId)->update(['status' => 'in-use']);
+        }
+
+        $corpse->save();
+
+        // Commit the transaction
+        DB::commit();
+
+        return redirect()->back()->with('success', 'Corpse details updated successfully.');
+    } catch (\Exception $e) {
+        // Rollback the transaction in case of an exception
+        DB::rollBack();
+
+        // Log the error or handle it appropriately
+        \Log::error('Error updating corpse: '.$e->getMessage());
+
+        return redirect()->back()->with('error', 'An error occurred while updating corpse details. Please try again.');
+    }
+}
+
+
+    
 
 }
