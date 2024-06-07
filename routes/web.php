@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\QRCodeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,3 +34,8 @@ Route::post('/settings/save', [HomeController::class, 'savesetting'])->name('set
 Route::post('/qr/code', [HomeController::class, 'qrCode'])->name('qr.code');
 Route::get('/corpse/{qr_code}/profile', [HomeController::class, 'corpseProfile'])->name('corpseProfile');
 Route::put('/corpse/{qr_code}/update', [HomeController::class, 'updateCorpse'])->name('corpse.update');
+Route::get('/scan', [HomeController::class, 'showScanner'])->name('qrcode.scan');
+Route::get('/staff/add', [HomeController::class, 'showAddStaff'])->name('showAddStaff');
+Route::get('/staff/all', [HomeController::class, 'showAllStaff'])->name('showAllStaff');
+Route::post('add/staffs', [HomeController::class, 'addStaff'])->name('staffs.store');
+Route::put('/staffs/{staffs}/update', [HomeController::class, 'updateStaff'])->name('staffs.update');

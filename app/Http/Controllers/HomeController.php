@@ -109,6 +109,23 @@ class HomeController extends Controller
         return view('storage.freezer', compact('freezer'));
     }
 
+     public function showScanner()
+    {
+        return view('scan');
+    }
+
+
+     public function showAddStaff()
+    {
+        return view('staff.add');
+    }
+
+     public function showAllStaff()
+    {
+        $staffs = User::where('role', 'staff')->get();
+        return view('staff.all', compact('staffs'));
+    }
+
    public function allCorpse()
 {
     $allCorpse = Corpse::with(['embalmment', 'freezer'])->get(); 
@@ -577,7 +594,52 @@ class HomeController extends Controller
     }
 }
 
+    public function addStaff(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'address' => 'required',
+            'email' => 'required|email|unique:users',
+            'phoneNumber' => 'required',
+            'country' => 'required',
+            'region' => 'required',
+            'password' => 'required|min:8|confirmed',
+        ]);
 
+        // Create a new user
+        $user = new User();
+        $user->name = $request->input('name');
+        $user->address = $request->input('address');
+        $user->email = $request->input('email');
+        $user->phoneNumber = $request->input('phoneNumber');
+        $user->country = $request->input('country');
+        $user->region = $request->input('region');
+        $user->password = Hash::make($request->input('password'));
+        $user->role = 'staff'; 
+        $user->save();
+
+        // Redirect back or wherever you prefer
+        return redirect()->route('showAllStaff')->with('success', 'Staff added successfully!');
+    }
+
+     public function updateStaff(Request $request, User $staffs)
+    {
+        $request->validate([
+            'name' => 'required',
+            'address' => 'required',
+            'phoneNumber' => 'required',
+            'email' => 'required',
+        ]);
+
+        $staffs->update([
+            'name' => $request->input('name'),
+            'address' => $request->input('address'),
+            'phoneNumber' => $request->input('phoneNumber'),
+            'email' => $request->input('email'),
+        ]);
+
+        return redirect()->route('showAllStaff')->with('success', 'Staff updated successfully!');
+    }
     
 
 }
