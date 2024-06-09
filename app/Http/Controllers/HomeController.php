@@ -18,6 +18,9 @@ use App\Models\Corpse;
 use App\Models\BroughtInBy;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
+
 
 class HomeController extends Controller
 {
@@ -38,15 +41,20 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $test = 101010101201201;
-        $imagePath = Storage::get('/assets/img/logo.png');
-        // $qrcode = QrCode::format('png')->mergeString('https://mortuary.cloud/assets/img/logo.png', .3)->generate($test);
-        $qrCodePath = public_path('qrcodes/test.png');
-        $qrcode = QrCode::format('png')->size(350)->color(50, 150, 170)->generate($test, $qrCodePath);
-        // $qrcode = QrCode::SMS(237673909858, '/public/qrcodes/qrcode.png');
-        $staff = User::where('role', 'staff')->count(); 
-        return view('home', compact('staff', 'qrcode')); 
+        $staff = User::where('role', 'staff')->count();
+        $autopsyCorpse = Corpse::where('status', 'autopsy')->count();
+        $missingCorpse = Corpse::where('status', 'missing')->count();
+        $paidCorpse = Corpse::where('paid', 0)->count();
+        $totalBill = Corpse::sum('bill');
+        $totalOwing = Corpse::where('paid', 0)->sum('bill');
+        $corpse = Corpse::count();
+        $recentCorpse = Corpse::where('created_at', '>=', Carbon::now()->startOfWeek())
+                         ->with(['freezer', 'embalmment'])
+                         ->get();
+
+        return view('home', compact('staff', 'corpse', 'autopsyCorpse', 'paidCorpse', 'totalBill', 'totalOwing', 'missingCorpse', 'recentCorpse')); 
     }
+
 
 
     public function profile(Request $request)
@@ -459,7 +467,7 @@ class HomeController extends Controller
        public function corpseProfile($qr_code)
     {
         // Retrieve the corpse by qr_code
-        $corpse = Corpse::where('qr_code', $qr_code)->with('broughtBy')->first();
+         $corpse = Corpse::whereRaw('BINARY `qr_code` = ?', [$qr_code])->with('broughtBy')->first();
         
         if (!$corpse) {
             return redirect()->back()->with('error', 'No corpse found with this QR code.');

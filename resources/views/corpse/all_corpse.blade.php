@@ -130,7 +130,7 @@
                                         <option value="missing" {{  $corspse->status == 'missing' ? 'selected' : '' }}>Missing</option>
                                     </select>
                                 </div>
-            <button type="submit" class="btn btn-primary me-sm-3 me-1 data-submit">Submit</button>
+            <button type="button" class="btn btn-primary me-sm-3 me-1 data-submit">Submit</button>
             <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
         </form>
     </div>

@@ -150,7 +150,7 @@
   <div class="toast-header">
     <i class='bx bx-bell me-2'></i>
     <div class="me-auto fw-medium">Bootstrap</div>
-    <small>11 mins ago</small>
+    <small>Now</small>
     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
   </div>
   <div class="toast-body">
@@ -192,7 +192,7 @@
 
         <p class="text-center">
           <span>Not a {{ config('app.name', 'MotaWare') }} Staff?</span>
-          <a href="register-cover.html">
+          <a href="{{route('enterQrCode')}}">
             <span>Track Your Corpse</span>
           </a>
         </p>
@@ -213,7 +213,7 @@
 
   
   <div class="buy-now">
-    <a href="/" target="_blank" class="btn btn-danger btn-buy-now">Track Corpse</a>
+    <a href="{{route('enterQrCode')}}" class="btn btn-danger btn-buy-now">Track Corpse</a>
   </div>
   
 

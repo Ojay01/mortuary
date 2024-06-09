@@ -3,13 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\QRCodeController;
+use Illuminate\Support\Facades\Auth;
+
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
-Auth::routes();
-
+// Auth::routes();
+Auth::routes(['register' => false]);
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/profile-setting', [HomeController::class, 'profile'])->name('profile');
 Route::get('/generate-qrcode', [HomeController::class, 'generateqrcode'])->name('generateqrcode');
@@ -33,9 +35,13 @@ Route::put('/embalments/{id}', [HomeController::class, 'updateembalments'])->nam
 Route::post('/settings/save', [HomeController::class, 'savesetting'])->name('settings.save');
 Route::post('/qr/code', [HomeController::class, 'qrCode'])->name('qr.code');
 Route::get('/corpse/{qr_code}/profile', [HomeController::class, 'corpseProfile'])->name('corpseProfile');
+Route::get('/my-corpse/{qr_code}/profile', [QRCodeController::class, 'scanmyCorpseProfile'])->name('myCorpseProfile');
+Route::get('/my-corpse/profile', [QRCodeController::class, 'myCorpseProfile'])->name('myCorpseProfile');
 Route::put('/corpse/{qr_code}/update', [HomeController::class, 'updateCorpse'])->name('corpse.update');
 Route::get('/scan', [HomeController::class, 'showScanner'])->name('qrcode.scan');
 Route::get('/staff/add', [HomeController::class, 'showAddStaff'])->name('showAddStaff');
 Route::get('/staff/all', [HomeController::class, 'showAllStaff'])->name('showAllStaff');
 Route::post('add/staffs', [HomeController::class, 'addStaff'])->name('staffs.store');
 Route::put('/staffs/{staffs}/update', [HomeController::class, 'updateStaff'])->name('staffs.update');
+Route::get('track/enter-qr-code', [QRCodeController::class, 'enterQrCode'])->name('enterQrCode');
+Route::get('track/scan-qr-code', [QRCodeController::class, 'scanQrCode'])->name('scanQrCode');
